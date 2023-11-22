@@ -30,80 +30,53 @@
     <div id="interpretation-container"></div>
 
     <script>
+    // 타로 카드 데이터
     const tarotCards = [
-    { name: 'The Fool', interpretation: '새로운 시작, 모험, 무분별한 행동', image: 'fool.jpg' },
-    { name: 'The Magician', interpretation: '능력, 창조적 역량, 에너지 융합', image: 'magician.jpg' },
-    { name: 'The High Priestess', interpretation: '직감, 미지의 지식, 숨은 진리', image: 'high_priestess.jpg' },
-    { name: 'The Empress', interpretation: '풍요, 창조성, 헌신', image: 'empress.jpg' },
-    { name: 'The Emperor', interpretation: '통제, 권위, 안정성', image: 'emperor.jpg' },
-    // 매져 기수 (Wands)
-    { name: 'Ace of Wands', interpretation: '창조적인 시작, 에너지의 흐름', image: 'ace_of_wands.jpg' },
-    { name: 'Two of Wands', interpretation: '계획, 선택의 시간', image: 'two_of_wands.jpg' },
-    { name: 'Three of Wands', interpretation: '기대, 확장, 발전', image: 'three_of_wands.jpg' },
-    // 컵 기수 (Cups)
-    { name: 'Ace of Cups', interpretation: '새로운 감정, 사랑의 시작', image: 'ace_of_cups.jpg' },
-    { name: 'Two of Cups', interpretation: '파트너십, 조화, 사랑의 연합', image: 'two_of_cups.jpg' },
-    { name: 'Three of Cups', interpretation: '기쁨, 축복, 사회적 연결', image: 'three_of_cups.jpg' },
-    // 소드 기수 (Swords)
-    { name: 'Ace of Swords', interpretation: '진리, 정신적인 깨달음, 새로운 아이디어', image: 'ace_of_swords.jpg' },
-    { name: 'Two of Swords', interpretation: '결정, 균형, 선택의 어려움', image: 'two_of_swords.jpg' },
-    { name: 'Three of Swords', interpretation: '실망, 슬픔, 감정적 상처', image: 'three_of_swords.jpg' },
-    // 코인 기수 (Pentacles)
-    { name: 'Ace of Pentacles', interpretation: '물질적 풍요, 안정, 새로운 기회', image: 'ace_of_pentacles.jpg' },
-    { name: 'Two of Pentacles', interpretation: '균형, 다양성, 선택의 어려움', image: 'two_of_pentacles.jpg' },
-    { name: 'Three of Pentacles', interpretation: '협력, 팀워크, 성취', image: 'three_of_pentacles.jpg' },
-    // 대 아르카나 (Major Arcana)
-    { name: 'The Lovers', interpretation: '사랑, 결합, 선택의 시간', image: 'lovers.jpg' },
-    { name: 'The Chariot', interpretation: '승리, 힘, 목표 달성', image: 'chariot.jpg' },
-    { name: 'Strength', interpretation: '인내, 용기, 자기 통제', image: 'strength.jpg' },
-    // ... (더 많은 기수 및 대 아르카나 추가)
-];
+        // ... (이전과 동일)
+    ];
 
+    // 카드 고르기 함수
+    function drawCards() {
+        const cardContainer = document.getElementById('card-container');
+        const interpretationContainer = document.getElementById('interpretation-container');
+        cardContainer.innerHTML = '';
+        interpretationContainer.innerHTML = '';
 
-        function drawCards() {
-            const cardContainer = document.getElementById('card-container');
-            const interpretationContainer = document.getElementById('interpretation-container');
-            cardContainer.innerHTML = '';
-            interpretationContainer.innerHTML = '';
+        // 카드를 랜덤으로 섞은 후 5장 선택
+        const shuffledCards = shuffleArray(tarotCards).slice(0, 5);
 
-            const shuffledCards = shuffleArray(tarotCards).slice(0, 5);
+        // 각 카드를 화면에 표시
+        shuffledCards.forEach((card, index) => {
+            const cardElement = document.createElement('div');
+            cardElement.classList.add('card');
+            cardElement.textContent = `Card ${index + 1}`;
+            cardContainer.appendChild(cardElement);
+        });
 
-            shuffledCards.forEach((card, index) => {
-                const cardElement = document.createElement('div');
-                cardElement.classList.add('card');
-                cardElement.textContent = `Card ${index + 1}`;
-                cardElement.addEventListener('click', () => showCardInterpretation(card, index + 1));
-                cardContainer.appendChild(cardElement);
-            });
+        // 모든 카드의 해석을 표시
+        displayAllInterpretations(shuffledCards);
+    }
 
-            displayAllInterpretations(shuffledCards);
-        }
+    // 모든 카드의 해석을 표시하는 함수
+    function displayAllInterpretations(cards) {
+        const interpretationContainer = document.getElementById('interpretation-container');
+        interpretationContainer.innerHTML = '';
 
-        function showCardInterpretation(card, cardNumber) {
-            const interpretationContainer = document.getElementById('interpretation-container');
+        cards.forEach((card, index) => {
             const cardInterpretation = document.createElement('div');
-            cardInterpretation.textContent = `${cardNumber}번 카드: ${card.interpretation}`;
+            cardInterpretation.textContent = `${index + 1}번 카드: ${card.interpretation}`;
             interpretationContainer.appendChild(cardInterpretation);
-        }
+        });
+    }
 
-        function displayAllInterpretations(cards) {
-            const interpretationContainer = document.getElementById('interpretation-container');
-            interpretationContainer.innerHTML = '';
-
-            cards.forEach((card, index) => {
-                const cardInterpretation = document.createElement('div');
-                cardInterpretation.textContent = `${index + 1}번 카드: ${card.interpretation}`;
-                interpretationContainer.appendChild(cardInterpretation);
-            });
+    // 배열을 무작위로 섞는 함수
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
         }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
+        return array;
+    }
     </script>
 </body>
 </html>

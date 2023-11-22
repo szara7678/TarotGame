@@ -30,12 +30,36 @@
     <div id="interpretation-container"></div>
 
     <script>
-    // 타로 카드 데이터
     const tarotCards = [
-        // ... (이전과 동일)
-    ];
+    { name: 'The Fool', interpretation: '새로운 시작, 모험, 무분별한 행동', image: 'fool.jpg' },
+    { name: 'The Magician', interpretation: '능력, 창조적 역량, 에너지 융합', image: 'magician.jpg' },
+    { name: 'The High Priestess', interpretation: '직감, 미지의 지식, 숨은 진리', image: 'high_priestess.jpg' },
+    { name: 'The Empress', interpretation: '풍요, 창조성, 헌신', image: 'empress.jpg' },
+    { name: 'The Emperor', interpretation: '통제, 권위, 안정성', image: 'emperor.jpg' },
+    // 매져 기수 (Wands)
+    { name: 'Ace of Wands', interpretation: '창조적인 시작, 에너지의 흐름', image: 'ace_of_wands.jpg' },
+    { name: 'Two of Wands', interpretation: '계획, 선택의 시간', image: 'two_of_wands.jpg' },
+    { name: 'Three of Wands', interpretation: '기대, 확장, 발전', image: 'three_of_wands.jpg' },
+    // 컵 기수 (Cups)
+    { name: 'Ace of Cups', interpretation: '새로운 감정, 사랑의 시작', image: 'ace_of_cups.jpg' },
+    { name: 'Two of Cups', interpretation: '파트너십, 조화, 사랑의 연합', image: 'two_of_cups.jpg' },
+    { name: 'Three of Cups', interpretation: '기쁨, 축복, 사회적 연결', image: 'three_of_cups.jpg' },
+    // 소드 기수 (Swords)
+    { name: 'Ace of Swords', interpretation: '진리, 정신적인 깨달음, 새로운 아이디어', image: 'ace_of_swords.jpg' },
+    { name: 'Two of Swords', interpretation: '결정, 균형, 선택의 어려움', image: 'two_of_swords.jpg' },
+    { name: 'Three of Swords', interpretation: '실망, 슬픔, 감정적 상처', image: 'three_of_swords.jpg' },
+    // 코인 기수 (Pentacles)
+    { name: 'Ace of Pentacles', interpretation: '물질적 풍요, 안정, 새로운 기회', image: 'ace_of_pentacles.jpg' },
+    { name: 'Two of Pentacles', interpretation: '균형, 다양성, 선택의 어려움', image: 'two_of_pentacles.jpg' },
+    { name: 'Three of Pentacles', interpretation: '협력, 팀워크, 성취', image: 'three_of_pentacles.jpg' },
+    // 대 아르카나 (Major Arcana)
+    { name: 'The Lovers', interpretation: '사랑, 결합, 선택의 시간', image: 'lovers.jpg' },
+    { name: 'The Chariot', interpretation: '승리, 힘, 목표 달성', image: 'chariot.jpg' },
+    { name: 'Strength', interpretation: '인내, 용기, 자기 통제', image: 'strength.jpg' },
+    // ... (더 많은 기수 및 대 아르카나 추가)
+];
 
-    // 카드 고르기 함수
+   // 카드 고르기 함수
     function drawCards() {
         const cardContainer = document.getElementById('card-container');
         const interpretationContainer = document.getElementById('interpretation-container');
@@ -50,11 +74,18 @@
             const cardElement = document.createElement('div');
             cardElement.classList.add('card');
             cardElement.textContent = `Card ${index + 1}`;
+            cardElement.addEventListener('click', () => showCardInterpretation(card, index + 1));
             cardContainer.appendChild(cardElement);
         });
 
         // 모든 카드의 해석을 표시
         displayAllInterpretations(shuffledCards);
+    }
+
+    // 각 카드를 클릭했을 때의 동작
+    function showCardInterpretation(card, cardNumber) {
+        // 클릭한 카드의 해석을 여기에 추가하거나 원하는 다른 동작을 수행할 수 있습니다.
+        // 이 예제에서는 아무 동작도 수행하지 않습니다.
     }
 
     // 모든 카드의 해석을 표시하는 함수

@@ -46,51 +46,64 @@
 
         #card-container {
             display: flex;
-            justify-content: space-around;
+            flex-wrap: wrap;
+            justify-content: center;
             margin-top: 20px;
             position: relative;
         }
 
-        .card {
-            width: 20vw; /* 화면의 20%로 설정 */
-            height: auto; /* 높이를 자동으로 조절하여 비율 유지 */
-            max-width: 100px; /* 카드의 최대 너비를 100px로 설정 */
-            min-height: 150px;
-            border: 1px solid #ccc;
-            text-align: center;
-            padding: 5px;
-            cursor: pointer;
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            animation: slideIn 0.5s ease-in-out;
-        }
+    .card {
+        width: 20vw;
+        height: auto;
+        max-width: 100px;
+        min-height: 150px;
+        border: 1px solid #ccc;
+        text-align: center;
+        padding: 5px;
+        cursor: pointer;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        animation: slideIn 0.5s ease-in-out;
+        margin: 5px;
+    }
 
-        .deck-image, .selected-card {
-            width: 100px;
-            height: 150px;
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
+        /* 추가: 해설 컨테이너의 높이를 수정 */
         #interpretation-container {
             margin-top: 20px;
-            height: 150px; /* 각주 컨테이너의 고정 높이를 설정합니다. */
+            height: auto;
+             font-size: 20px;
+            font-weight: bold;
         }
+
+            .selected-card {
+        width: 40vw; /* 예시: 화면의 40%로 설정 */
+        height: auto; /* 높이를 자동으로 조절하여 비율 유지 */
+        max-width: 200px; /* 선택된 카드의 최대 너비를 200px로 설정 */
+        min-height: 300px; /* 선택된 카드의 최소 높이를 300px로 설정 */
+    }
     </style>
+        <script>
+        // 페이지 로딩 완료 후 실행할 함수
+        document.addEventListener('DOMContentLoaded', function () {
+            // drawCards 함수 호출
+            drawCards();
+        });
+    </script>
 </head>
 <body>
-    <h1>타로 카드 게임</h1>
-    <button onclick="drawCards()">카드 고르기</button>
-    <div id="card-container">
-        <!-- deckImage 초기 화면에 추가 -->
-        <div class="card deck-image" style="opacity: 1; background-image: url('deck.png')"></div>
-    </div>
-    <div id="interpretation-container"></div>
 
+<h1>타로 카드 게임</h1>
+    <div id="interpretation-container">
+        <p>오늘의 운세 타로 카드를 선택해주세요</p>
+    </div>
+
+    <div id="card-container">
+        <!-- 기존 카드 컨테이너 코드 유지 -->
+    </div>
 
     <script>
+
     const tarotCards = [
 // ...
 
@@ -227,25 +240,24 @@
 
 
 
-  function drawCards() {
-    const cardContainer = document.getElementById('card-container');
-    const interpretationContainer = document.getElementById('interpretation-container');
-    cardContainer.innerHTML = '';
-    interpretationContainer.innerHTML = '<p>오늘의 운세 타로 카드를 선택해주세요</p>';
+    // drawCards 함수 수정
+    function drawCards() {
+        const cardContainer = document.getElementById('card-container');
+        const interpretationContainer = document.getElementById('interpretation-container');
+        cardContainer.innerHTML = '';
+        interpretationContainer.innerHTML = '<p>오늘의 운세 타로 카드를 선택해주세요</p>';
 
-    // 카드를 섞고 지연 효과를 가진 애니메이션을 적용하여 5장의 카드를 표시합니다.
-    const shuffledCards = shuffleArray(tarotCards).slice(0, 5);
-    shuffledCards.forEach((card, index) => {
-        const cardElement = document.createElement('div');
-        cardElement.classList.add('card');
-        cardElement.style.backgroundImage = `url('deck.png')`; // 'deck.png'로 변경
-        cardElement.addEventListener('click', () => revealCard(card, shuffledCards));
-        cardContainer.appendChild(cardElement);
-    });
+        const shuffledCards = shuffleArray(tarotCards).slice(0, 8); // 6장으로 수정
+        shuffledCards.forEach((card, index) => {
+            const cardElement = document.createElement('div');
+            cardElement.classList.add('card');
+            cardElement.style.backgroundImage = `url('deck.png')`;
+            cardElement.addEventListener('click', () => revealCard(card, shuffledCards));
+            cardContainer.appendChild(cardElement);
+        });
 
-    // 'deckImage'를 숨기는 함수 호출
-    hideDeckImage();
-}
+        hideDeckImage();
+    }
 
 function revealCard(selectedCard, remainingCards) {
     const cardContainer = document.getElementById('card-container');
@@ -300,6 +312,10 @@ function revealCard(selectedCard, remainingCards) {
             }
             return array;
         }
+        document.addEventListener('DOMContentLoaded', function () {
+            // drawCards 함수 호출
+            drawCards();
+        });
     </script>
 </body>
 </html>

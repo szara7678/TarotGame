@@ -270,7 +270,7 @@ function revealCard(selectedCard, remainingCards) {
         const cardInterpretation = document.createElement('div');
         cardInterpretation.textContent = `${selectedCard.name} : ${selectedCard.interpretation}`;
         const detailedInterpretation = document.createElement('div');
-        detailedInterpretation.innerHTML = `해설 : ${selectedCard.meaning.split('.').join('.<br>') || '해설이 없습니다.'}`;
+        detailedInterpretation.innerHTML = `해설 : ${selectedCard.meaning.split('.').join('.<br>') }`;
         interpretationContainer.innerHTML = '';
         interpretationContainer.appendChild(cardInterpretation);
         interpretationContainer.appendChild(detailedInterpretation);

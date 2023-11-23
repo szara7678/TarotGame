@@ -283,7 +283,7 @@ function revealCard(selectedCard, remainingCards) {
             <div>ㅡ ${selectedCard.name} ㅡ</div>
             <div>${selectedCard.interpretation}</div>
             <br>
-            <div>${selectedCard.meaning.split('.').join('.<br>')}</div>
+            <div style="font-size: 18px;">${selectedCard.meaning.split('.').join('.<br>')}</div>
         `;
         interpretationContainer.innerHTML = '';
         interpretationContainer.appendChild(cardInterpretation);

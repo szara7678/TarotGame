@@ -92,8 +92,6 @@
     </script>
 </head>
 <body>
-
-<h1>타로 카드 게임</h1>
     <div id="interpretation-container">
         <p>오늘의 운세 타로 카드를 선택해주세요</p>
     </div>
@@ -247,7 +245,7 @@
         cardContainer.innerHTML = '';
         interpretationContainer.innerHTML = '<p>오늘의 운세 타로 카드를 선택해주세요</p>';
 
-        const shuffledCards = shuffleArray(tarotCards).slice(0, 8); // 6장으로 수정
+        const shuffledCards = shuffleArray(tarotCards).slice(0, 9); // 6장으로 수정
         shuffledCards.forEach((card, index) => {
             const cardElement = document.createElement('div');
             cardElement.classList.add('card');
@@ -280,12 +278,15 @@ function revealCard(selectedCard, remainingCards) {
 
         // Display interpretations
         const cardInterpretation = document.createElement('div');
-        cardInterpretation.textContent = `${selectedCard.name} : ${selectedCard.interpretation}`;
-        const detailedInterpretation = document.createElement('div');
-        detailedInterpretation.innerHTML = `해설 : ${selectedCard.meaning.split('.').join('.<br>') }`;
+        cardInterpretation.innerHTML = `
+            <div>[ 해설 ]</div>
+            <div>ㅡ ${selectedCard.name} ㅡ</div>
+            <div>${selectedCard.interpretation}</div>
+            <br>
+            <div>${selectedCard.meaning.split('.').join('.<br>')}</div>
+        `;
         interpretationContainer.innerHTML = '';
         interpretationContainer.appendChild(cardInterpretation);
-        interpretationContainer.appendChild(detailedInterpretation);
 
         // 'deckImage'를 숨기는 함수 호출
         hideDeckImage();

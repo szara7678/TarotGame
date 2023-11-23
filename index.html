@@ -14,7 +14,7 @@
             }
         }
 
-                @keyframes slideIn {
+        @keyframes slideIn {
             from {
                 transform: translate(-50%, 0%) scale(0);
                 opacity: 0;
@@ -25,7 +25,17 @@
             }
         }
 
-                        body {
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                display: none; /* 추가: 투명도가 0이 되면 화면에서 완전히 제거 */
+            }
+        }
+
+        body {
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -42,28 +52,28 @@
         }
 
         .card {
-    width: 20vw; /* 화면의 20%로 설정 */
-    height: auto; /* 높이를 자동으로 조절하여 비율 유지 */
-    max-width: 100px; /* 카드의 최대 너비를 100px로 설정 */
+            width: 20vw; /* 화면의 20%로 설정 */
+            height: auto; /* 높이를 자동으로 조절하여 비율 유지 */
+            max-width: 100px; /* 카드의 최대 너비를 100px로 설정 */
             min-height: 150px;
-    border: 1px solid #ccc;
-    text-align: center;
-    padding: 5px;
-    cursor: pointer;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    animation: slideIn 0.5s ease-in-out;
+            border: 1px solid #ccc;
+            text-align: center;
+            padding: 5px;
+            cursor: pointer;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            animation: slideIn 0.5s ease-in-out;
         }
 
-                .deck-image {
+        .deck-image, .selected-card {
             width: 100px;
             height: 150px;
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
-            animation: fadeIn 0.5s ease-in-out; /* Animation for fade-in effect */
         }
+
         #interpretation-container {
             margin-top: 20px;
             height: 150px; /* 각주 컨테이너의 고정 높이를 설정합니다. */
@@ -72,7 +82,7 @@
 </head>
 <body>
     <h1>타로 카드 게임</h1>
-        <button onclick="drawCards()">카드 고르기</button>
+    <button onclick="drawCards()">카드 고르기</button>
     <div id="card-container">
         <!-- deckImage 초기 화면에 추가 -->
         <div class="card deck-image" style="opacity: 1; background-image: url('deck.png')"></div>
@@ -82,78 +92,205 @@
 
     <script>
     const tarotCards = [
-    { name: 'The Fool', interpretation: '새로운 시작, 모험, 무분별한 행동', image: 'fool.jpg' },
-    { name: 'The Magician', interpretation: '능력, 창조적 역량, 에너지 융합', image: 'magician.jpg' },
-    { name: 'The High Priestess', interpretation: '직감, 미지의 지식, 숨은 진리', image: 'high_priestess.jpg' },
-    { name: 'The Empress', interpretation: '풍요, 창조성, 헌신', image: 'empress.jpg' },
-    { name: 'The Emperor', interpretation: '통제, 권위, 안정성', image: 'emperor.jpg' },
-    // 매져 기수 (Wands)
-    { name: 'Ace of Wands', interpretation: '창조적인 시작, 에너지의 흐름', image: 'ace_of_wands.jpg' },
-    { name: 'Two of Wands', interpretation: '계획, 선택의 시간', image: 'two_of_wands.jpg' },
-    { name: 'Three of Wands', interpretation: '기대, 확장, 발전', image: 'three_of_wands.jpg' },
-    // 컵 기수 (Cups)
-    { name: 'Ace of Cups', interpretation: '새로운 감정, 사랑의 시작', image: 'ace_of_cups.jpg' },
-    { name: 'Two of Cups', interpretation: '파트너십, 조화, 사랑의 연합', image: 'two_of_cups.jpg' },
-    { name: 'Three of Cups', interpretation: '기쁨, 축복, 사회적 연결', image: 'three_of_cups.jpg' },
-    // 소드 기수 (Swords)
-    { name: 'Ace of Swords', interpretation: '진리, 정신적인 깨달음, 새로운 아이디어', image: 'ace_of_swords.jpg' },
-    { name: 'Two of Swords', interpretation: '결정, 균형, 선택의 어려움', image: 'two_of_swords.jpg' },
-    { name: 'Three of Swords', interpretation: '실망, 슬픔, 감정적 상처', image: 'three_of_swords.jpg' },
-    // 코인 기수 (Pentacles)
-    { name: 'Ace of Pentacles', interpretation: '물질적 풍요, 안정, 새로운 기회', image: 'ace_of_pentacles.jpg' },
-    { name: 'Two of Pentacles', interpretation: '균형, 다양성, 선택의 어려움', image: 'two_of_pentacles.jpg' },
-    { name: 'Three of Pentacles', interpretation: '협력, 팀워크, 성취', image: 'three_of_pentacles.jpg' },
-    // 대 아르카나 (Major Arcana)
-    { name: 'The Lovers', interpretation: '사랑, 결합, 선택의 시간', image: 'lovers.jpg' },
-    { name: 'The Chariot', interpretation: '승리, 힘, 목표 달성', image: 'chariot.jpg' },
-    { name: 'Strength', interpretation: '인내, 용기, 자기 통제', image: 'strength.jpg' },
-    // ... (더 많은 기수 및 대 아르카나 추가)
+// ...
+
+// 대 아르카나 (Major Arcana)
+{
+    name: 'The Fool',
+    interpretation: '새로운 시작, 모험, 무분별한 행동',
+    image: 'fool.jpg',
+    meaning: '오늘은 새로운 시작의 기회가 찾아옵니다. 무모한 것처럼 보일 수 있지만, 자유로움과 창조적인 모험을 통해 새로운 지평을 열어보세요. 어떤 도전에도 두려워하지 마세요. 그것이 당신의 성장을 가져올 것입니다.'
+},
+{
+    name: 'The Magician',
+    interpretation: '능력, 창조적 역량, 에너지 융합',
+    image: 'magician.jpg',
+    meaning: '당신은 현재 상황에서 주인공이며, 강력한 능력을 가지고 있습니다. 창조적인 역량과 에너지를 결합하여 원하는 것을 만들어낼 수 있습니다. 자신의 능력을 자각하고 적극적으로 활용하세요.'
+},
+{
+    name: 'The High Priestess',
+    interpretation: '직감, 미지의 지식, 숨은 진리',
+    image: 'high_priestess.jpg',
+    meaning: '오늘은 직관력이 강화되는 날입니다. 미지의 지식과 숨겨진 진리에 주목하세요. 자신의 내면에 귀 기울이고 직관에 따라 행동하면 좋은 결정을 내릴 수 있을 것입니다.'
+},
+{
+    name: 'The Empress',
+    interpretation: '풍요, 창조성, 헌신',
+    image: 'empress.jpg',
+    meaning: '풍요로운 시기입니다. 주변의 아름다움에 주목하고, 창조적인 활동을 즐기세요. 헌신과 관용으로 주변을 더 풍요롭게 만들 수 있는 기회가 찾아올 것입니다.'
+},
+{
+    name: 'The Emperor',
+    interpretation: '통제, 권위, 안정성',
+    image: 'emperor.jpg',
+    meaning: '당신의 안정성과 통제 능력이 강조되는 시기입니다. 권위를 통해 주변을 이끌어 나가세요. 안정적이고 조직적인 방식으로 문제에 접근하면 원하는 목표를 달성할 수 있을 것입니다.'
+},
+// 매져 기수 (Wands)
+{
+    name: 'Ace of Wands',
+    interpretation: '창조적인 시작, 에너지의 흐름',
+    image: 'ace_of_wands.jpg',
+    meaning: '새로운 창조적인 시작의 기회가 다가왔습니다. 에너지가 넘치고 열정을 가지고 새로운 프로젝트를 시작하거나 기존의 문제에 대한 창의적인 해결책을 찾아보세요.'
+},
+{
+    name: 'Two of Wands',
+    interpretation: '계획, 선택의 시간',
+    image: 'two_of_wands.jpg',
+    meaning: '오늘은 계획을 세우고 선택의 시간입니다. 미래의 가능성을 고려하며 목표를 향해 나아가는 계획을 세우세요. 결정에 신중히 생각하면 미래에 큰 성공을 거둘 수 있습니다.'
+},
+{
+    name: 'Three of Wands',
+    interpretation: '기대, 확장, 발전',
+    image: 'three_of_wands.jpg',
+    meaning: '당신의 기대와 목표가 확장되고 발전하는 중입니다. 더 큰 성취를 위해 새로운 가능성을 탐험하고 성장의 기회를 적극적으로 받아들이세요.'
+},
+// 컵 기수 (Cups)
+{
+    name: 'Ace of Cups',
+    interpretation: '새로운 감정, 사랑의 시작',
+    image: 'ace_of_cups.jpg',
+    meaning: '새로운 감정이 불타오르는 순간입니다. 사랑의 시작이나 감동적인 순간이 다가올 것입니다. 주변의 감정에 민감하게 반응하고 행복한 순간을 나누세요.'
+},
+{
+    name: 'Two of Cups',
+    interpretation: '파트너십, 조화, 사랑의 연합',
+    image: 'two_of_cups.jpg',
+    meaning: '오늘은 파트너와의 조화와 사랑의 연합이 강조됩니다. 대화를 통해 의사소통을 강화하고 관계를 더욱 깊게 발전시키는 좋은 기회가 될 것입니다.'
+},
+{
+    name: 'Three of Cups',
+    interpretation: '기쁨, 축복, 사회적 연결',
+    image: 'three_of_cups.jpg',
+    meaning: '기쁨과 축복이 주변에 넘치는 시기입니다. 사회적인 행사나 모임에 참여하여 새로운 친구들과 연결하고 즐거운 시간을 보내세요.'
+},
+// 소드 기수 (Swords)
+{
+    name: 'Ace of Swords',
+    interpretation: '진리, 정신적인 깨달음, 새로운 아이디어',
+    image: 'ace_of_swords.jpg',
+    meaning: '오늘은 진리를 찾는 정신적인 깨달음이 다가올 것입니다. 새로운 아이디어와 통찰력을 활용하여 현재 상황을 더 잘 이해하고 해결책을 찾을 수 있을 것입니다.'
+},
+{
+    name: 'Two of Swords',
+    interpretation: '결정, 균형, 선택의 어려움',
+    image: 'two_of_swords.jpg',
+    meaning: '당면한 결정에 대한 어려움이 있을 수 있습니다. 신중하게 판단하고 균형을 유지하며 선택을 진행하세요. 결정을 내리면 미래에 더 나은 균형을 찾을 수 있을 것입니다.'
+},
+{
+    name: 'Three of Swords',
+    interpretation: '실망, 슬픔, 감정적 상처',
+    image: 'three_of_swords.jpg',
+    meaning: '감정적인 상처를 경험할 수 있는 날입니다. 실망과 슬픔에 대처하는 방법을 찾아내고, 친구나 가족과 소통하여 감정을 나누는 것이 중요합니다.'
+},
+// 코인 기수 (Pentacles)
+{
+    name: 'Ace of Pentacles',
+    interpretation: '물질적 풍요, 안정, 새로운 기회',
+    image: 'ace_of_pentacles.jpg',
+    meaning: '물질적인 풍요와 안정이 다가올 것입니다. 새로운 기회가 문을 열고 안정적인 경제적 상황을 만들어 나갈 수 있는 좋은 시기입니다.'
+},
+{
+    name: 'Two of Pentacles',
+    interpretation: '균형, 다양성, 선택의 어려움',
+    image: 'two_of_pentacles.jpg',
+    meaning: '균형을 유지하는 것이 중요한 날입니다. 다양한 분야에서 활동하며 선택의 어려움을 극복하세요. 유연성을 유지하면 여러 가지 일을 동시에 효과적으로 처리할 수 있을 것입니다.'
+},
+{
+    name: 'Three of Pentacles',
+    interpretation: '협력, 팀워크, 성취',
+    image: 'three_of_pentacles.jpg',
+    meaning: '협력과 팀워크가 성취로 이어지는 시기입니다. 다른 사람들과의 협업이 중요하게 작용하며, 공동의 목표를 달성할 수 있는 좋은 기회가 찾아올 것입니다.'
+},
+// 대 아르카나 (Major Arcana)
+{
+    name: 'The Lovers',
+    interpretation: '사랑, 결합, 선택의 시간',
+    image: 'lovers.jpg',
+    meaning: '사랑과 결합이 강조되는 날입니다. 마음의 소리를 듣고 솔직한 감정을 나누는 것이 중요합니다. 선택의 기회가 찾아오니 신중히 고려하세요.'
+},
+{
+    name: 'The Chariot',
+    interpretation: '승리, 힘, 목표 달성',
+    image: 'chariot.jpg',
+    meaning: '오늘은 목표를 향해 나아가는 힘찬 날입니다. 어려움을 이겨내고 승리를 거둘 수 있는 능력이 강조됩니다. 목표에 대한 집중과 헌신이 성공을 가져올 것입니다.'
+},
+{
+    name: 'Strength',
+    interpretation: '인내, 용기, 자기 통제',
+    image: 'strength.jpg',
+    meaning: '오늘은 인내와 용기가 필요한 상황일 수 있습니다. 어려운 문제에 직면했을 때 자기 통제를 유지하고 차분하게 상황을 극복하세요. 당신의 강인한 의지가 문제를 해결할 열쇠입니다.'
+},
+// ... (더 많은 기수 및 대 아르카나 추가)
 ];
 
-       function drawCards() {
-           const cardContainer = document.getElementById('card-container');
-           const interpretationContainer = document.getElementById('interpretation-container');
-           cardContainer.innerHTML = '';
-           interpretationContainer.innerHTML = '';
-
-           // 카드를 섞고 지연 효과를 가진 애니메이션을 적용하여 5장의 카드를 표시합니다.
-           const shuffledCards = shuffleArray(tarotCards).slice(0, 5);
-           shuffledCards.forEach((card, index) => {
-               const cardElement = document.createElement('div');
-               cardElement.classList.add('card');
-               cardElement.style.backgroundImage = `url(${card.image})`;
-               cardContainer.appendChild(cardElement);
-           });
-           // Display interpretations
-           displayAllInterpretations(shuffledCards);
-           // 'deckImage'를 숨기는 함수 호출
-           hideDeckImage();
-       }
+// ...
 
 
+
+  function drawCards() {
+    const cardContainer = document.getElementById('card-container');
+    const interpretationContainer = document.getElementById('interpretation-container');
+    cardContainer.innerHTML = '';
+    interpretationContainer.innerHTML = '<p>오늘의 운세 타로 카드를 선택해주세요</p>';
+
+    // 카드를 섞고 지연 효과를 가진 애니메이션을 적용하여 5장의 카드를 표시합니다.
+    const shuffledCards = shuffleArray(tarotCards).slice(0, 5);
+    shuffledCards.forEach((card, index) => {
+        const cardElement = document.createElement('div');
+        cardElement.classList.add('card');
+        cardElement.style.backgroundImage = `url('deck.png')`; // 'deck.png'로 변경
+        cardElement.addEventListener('click', () => revealCard(card, shuffledCards));
+        cardContainer.appendChild(cardElement);
+    });
+
+    // 'deckImage'를 숨기는 함수 호출
+    hideDeckImage();
+}
+
+function revealCard(selectedCard, remainingCards) {
+    const cardContainer = document.getElementById('card-container');
+    const interpretationContainer = document.getElementById('interpretation-container');
+
+    // 나머지 카드들을 페이드 아웃
+    document.querySelectorAll('.card').forEach((remainingCard, index) => {
+        if (remainingCard !== event.currentTarget) {
+            remainingCard.style.animation = 'fadeOut 0.5s ease-in-out';
+        }
+    });
+
+    // 페이드 아웃 애니메이션이 끝난 후 실행
+    setTimeout(() => {
+        cardContainer.innerHTML = '';
+        const selectedCardElement = document.createElement('div');
+        selectedCardElement.classList.add('card', 'selected-card'); // 'selected-card' 클래스 추가
+        selectedCardElement.style.backgroundImage = `url(${selectedCard.image})`;
+        cardContainer.appendChild(selectedCardElement);
+
+        // Display interpretations
+        const cardInterpretation = document.createElement('div');
+        cardInterpretation.textContent = `${selectedCard.name} : ${selectedCard.interpretation}`;
+        const detailedInterpretation = document.createElement('div');
+        detailedInterpretation.innerHTML = `해설 : ${selectedCard.meaning.split('.').join('.<br>') || '해설이 없습니다.'}`;
+        interpretationContainer.innerHTML = '';
+        interpretationContainer.appendChild(cardInterpretation);
+        interpretationContainer.appendChild(detailedInterpretation);
+
+        // 'deckImage'를 숨기는 함수 호출
+        hideDeckImage();
+    }, 500);
+}
 
         function hideDeckImage() {
             const cardContainer = document.getElementById('card-container');
 
-            // 'deckImage'를 숨기기 위해 이전 코드를 추가
+            // 'deckImage'에 페이드 아웃 애니메이션 적용
             const deckImage = document.querySelector('.deck-image');
-            deckImage.style.opacity = '0';
+            deckImage.style.animation = 'fadeOut 0.5s ease-in-out';
 
-            // 'deckImage'를 숨김 처리 후 화면에서 제거
+            // 'deckImage'를 숨기고 애니메이션이 끝난 후 화면에서 제거
             setTimeout(() => {
-                cardContainer.removeChild(deckImage);
+                deckImage.style.display = 'none'; // 'display' 속성을 'none'으로 변경
             }, 500);
-        }
-
-        function displayAllInterpretations(cards) {
-            const interpretationContainer = document.getElementById('interpretation-container');
-            interpretationContainer.innerHTML = '';
-
-            cards.forEach((card, index) => {
-                const cardInterpretation = document.createElement('div');
-                cardInterpretation.textContent = `${card.name} : ${card.interpretation}`;
-                interpretationContainer.appendChild(cardInterpretation);
-            });
         }
 
         function shuffleArray(array) {
